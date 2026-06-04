@@ -16,6 +16,9 @@ PROJECT_DIR = SCRIPT_DIR.parent
 
 load_dotenv()
 
+sys.path.insert(0, str(PROJECT_DIR / "backend"))
+from src.embed import EMBEDDING_MODEL, EMBEDDING_API_KEY, OPENROUTER_EMBEDDINGS_URL, embed_batch
+
 SOURCES = {
     "arcpro": {
         "index_json": str(PROJECT_DIR / "data/arcpro_index.json"),
@@ -27,11 +30,8 @@ SOURCES = {
     },
 }
 
-EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "openai/text-embedding-3-small")
-EMBEDDING_API_KEY = os.getenv("EMBEDDING_API_KEY") or os.getenv("OPENROUTER_API_KEY", "")
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
 QDRANT_COLLECTION = os.getenv("QDRANT_COLLECTION", "arcgis_docs")
-OPENROUTER_EMBEDDINGS_URL = "https://openrouter.ai/api/v1/embeddings"
 
 
 def flatten_entries(pages: list[dict]) -> list[dict]:
@@ -46,6 +46,7 @@ def flatten_entries(pages: list[dict]) -> list[dict]:
                 "payload": {
                     "url": page["url"],
                     "title": title,
+                    "summary": summary,
                     "section": "",
                     "breadcrumb": page.get("breadcrumb", []),
                     "source": page["source"],
@@ -70,18 +71,6 @@ def flatten_entries(pages: list[dict]) -> list[dict]:
                 },
             })
     return entries
-
-
-async def embed_batch(client: httpx.AsyncClient, texts: list[str]) -> list[list[float]]:
-    resp = await client.post(
-        OPENROUTER_EMBEDDINGS_URL,
-        json={"input": texts, "model": EMBEDDING_MODEL},
-        headers={"Authorization": f"Bearer {EMBEDDING_API_KEY}"},
-        timeout=60.0,
-    )
-    resp.raise_for_status()
-    data = resp.json()
-    return [item["embedding"] for item in data["data"]]
 
 
 async def detect_vector_size(client: httpx.AsyncClient) -> int:
