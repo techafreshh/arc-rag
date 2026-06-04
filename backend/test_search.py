@@ -95,17 +95,36 @@ async def test_live_search():
         return
 
     from src.tools.search import search_index as si
-    r = await si("buffer", top_k=3)
-    assert r.error is None, f"Search error: {r.error}"
-    print(f"  Query 'buffer' -> {len(r.results)} results")
-    for res in r.results:
-        print(f"    {res.score:.3f} {res.title} ({res.source}) -> {res.url[:60]}...")
-    assert len(r.results) > 0, "Expected at least 1 result for 'buffer'"
+    QUERY_KEYWORDS = [
+        ("How do I create a buffer in ArcGIS Pro?", "buffer"),
+        ("How do I clip features?", "clip"),
+        ("What is the Intersect tool?", "intersect"),
+        ("What is a geodatabase?", "geodatabase"),
+        ("How do I use ArcPy?", "arcpy"),
+        ("How do I georeference in ArcMap?", "georeference"),
+        ("How do I create a buffer in ArcMap?", "buffer"),
+        ("How do I merge datasets?", "merge"),
+        ("How to use ModelBuilder?", "modelbuilder"),
+        ("What is a shapefile?", "shapefile"),
+    ]
 
-    r2 = await si("buffer in ArcMap", top_k=3)
-    print(f"  Query 'buffer in ArcMap' -> {len(r2.results)} results (source filter: {detect_source_filter('buffer in ArcMap')})")
-    assert r2.error is None
-    print("PASS - live search returns results for 'buffer' and 'buffer in ArcMap'")
+    hits = 0
+    total = len(QUERY_KEYWORDS)
+    for query, kw in QUERY_KEYWORDS:
+        r = await si(query, top_k=3)
+        if r.error:
+            print(f"  SKIP {query!r}: {r.error}")
+            continue
+        if r.results and kw.lower() in r.results[0].title.lower() + r.results[0].url.lower():
+            hits += 1
+            print(f"  HIT  {query!r} -> {r.results[0].title}")
+        else:
+            top = r.results[0].title if r.results else "(no results)"
+            print(f"  MISS {query!r} -> {top}")
+
+    print(f"  Hit rate: {hits}/{total}")
+    assert hits >= 8, f"Expected >= 8/10 hits, got {hits}/{total}"
+    print("PASS - live search hit rate >= 8/10")
 
 
 async def test():
