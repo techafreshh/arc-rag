@@ -8,6 +8,46 @@ services:
       - qdrant_data:/qdrant/storage
     environment:
       - QDRANT__SERVICE__GRPC_PORT=6334
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:6333/health"]
+      interval: 5s
+      retries: 10
+
+  arcrag-init:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: ["/app/scripts/init.sh"]
+    restart: "no"
+    env_file: backend/.env
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_COLLECTION=arcgis_docs
+    volumes:
+      - arcrag_data:/app/data
+    depends_on:
+      qdrant:
+        condition: service_healthy
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: ["python", "-m", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "8000:8000"
+    env_file: backend/.env
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_COLLECTION=arcgis_docs
+    volumes:
+      - arcrag_data:/app/data
+    depends_on:
+      qdrant:
+        condition: service_healthy
+      arcrag-init:
+        condition: service_completed_successfully
 
 volumes:
   qdrant_data:
+  arcrag_data:

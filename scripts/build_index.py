@@ -30,15 +30,21 @@ SOURCES = {
 
 
 async def fetch_html(client: httpx.AsyncClient, url: str) -> str | None:
-    try:
-        resp = await client.get(url)
-    except Exception as e:
-        print(f" FAILED: {e}", flush=True)
-        return None
-    if resp.status_code != 200:
-        print(f" HTTP {resp.status_code}", flush=True)
-        return None
-    return resp.text
+    for attempt in range(2):
+        try:
+            resp = await client.get(url)
+        except Exception as e:
+            print(f" FAILED: {e}", flush=True)
+            return None
+        if resp.status_code == 429 and attempt == 0:
+            print(f" HTTP 429 (rate limited), sleeping 5s and retrying", flush=True)
+            await asyncio.sleep(5)
+            continue
+        if resp.status_code != 200:
+            print(f" HTTP {resp.status_code}", flush=True)
+            return None
+        return resp.text
+    return None
 
 
 def extract_title(article: Tag) -> str:

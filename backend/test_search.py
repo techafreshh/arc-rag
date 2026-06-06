@@ -127,6 +127,40 @@ async def test_live_search():
     print("PASS - live search hit rate >= 8/10")
 
 
+async def test_obscure_tool_zonal_statistics():
+    print("\n--- Test 8: Obscure tool 'Zonal Statistics as Table' in top 5 ---")
+    api_key = os.getenv("EMBEDDING_API_KEY") or os.getenv("OPENROUTER_API_KEY", "")
+    qdrant_url = os.getenv("QDRANT_URL", "http://localhost:6333")
+    if not api_key:
+        print("SKIP - no API key set")
+        return
+    from qdrant_client import QdrantClient
+    try:
+        q = QdrantClient(url=qdrant_url)
+        q.get_collections()
+    except Exception:
+        print("SKIP - Qdrant not reachable")
+        return
+
+    r = await search_index("Zonal Statistics as Table", top_k=5)
+    if r.error:
+        print(f"  SKIP - search error: {r.error}")
+        return
+    if not r.results:
+        print("  SKIP - no results returned")
+        return
+
+    target_suffix = "zonal-statistics-as-table.htm"
+    found = any(
+        target_suffix in result.url.lower() or "zonal statistics" in result.title.lower()
+        for result in r.results
+    )
+    top_titles = [(res.title, res.url.rsplit("/", 1)[-1]) for res in r.results]
+    print(f"  Top 5 results: {top_titles}")
+    assert found, f"Expected Zonal Statistics as Table page in top 5, got: {top_titles}"
+    print("PASS - Zonal Statistics as Table page found in top 5")
+
+
 async def test():
     await test_import()
     await test_models()
@@ -135,6 +169,7 @@ async def test():
     await test_empty_query()
     await test_qdrant_unreachable()
     await test_live_search()
+    await test_obscure_tool_zonal_statistics()
     print("\n=== ALL TESTS PASSED ===")
 
 
