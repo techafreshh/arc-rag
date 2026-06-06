@@ -2,6 +2,7 @@
 
 import { CopilotSidebar } from "@copilotkit/react-ui";
 import "@copilotkit/react-ui/styles.css";
+import { ChatSuggestions } from "@/components/ChatSuggestions";
 import { markdownComponents } from "@/components/markdownComponents";
 
 export default function HomePage() {
@@ -14,6 +15,7 @@ export default function HomePage() {
       }}
       markdownTagRenderers={markdownComponents}
     >
+      <ChatSuggestions />
       <main className="mx-auto max-w-3xl px-6 py-16">
         <h1 className="text-3xl font-semibold tracking-tight">
           ArcGIS Documentation Guide

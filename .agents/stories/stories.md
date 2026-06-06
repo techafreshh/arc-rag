@@ -400,9 +400,9 @@ As a student, I want each answer to include a clickable link to the original doc
 As a student, I want to see suggested questions I can click on, so that I know what kinds of things I can ask the agent.
 
 #### Acceptance Criteria
-- [ ] Given the chat is empty (no messages yet), when the page loads, then I see 4-6 suggestion pills/buttons with example questions
-- [ ] Given I click a suggestion pill, when it activates, then the question is sent to the agent as if I typed it
-- [ ] Given the suggestions shown, when I read them, then they cover a mix of ArcGIS Pro and ArcMap topics
+- [x] Given the chat is empty (no messages yet), when the page loads, then I see 4-6 suggestion pills/buttons with example questions
+- [x] Given I click a suggestion pill, when it activates, then the question is sent to the agent as if I typed it
+- [x] Given the suggestions shown, when I read them, then they cover a mix of ArcGIS Pro and ArcMap topics
 
 #### Technical Notes
 - Use CopilotKit's `useConfigureSuggestions` hook or custom initial message component
@@ -560,27 +560,27 @@ As a developer, I want to validate the deployed system against a test suite of r
 
 ### Story Overview
 
-| ID | Title | Type | Priority | Complexity | Phase | Blocked By |
-|----|-------|------|----------|------------|-------|------------|
-| ARCRAG-01 | Project Scaffolding & Docker Infrastructure | Task | High | Small | 1 | — |
-| ARCRAG-02 | PydanticAI Agent with OpenRouter Connection | Story | High | Medium | 1 | ARCRAG-01 |
-| ARCRAG-03 | fetch_page Tool — Live Documentation Scraper | Story | High | Medium | 1 | ARCRAG-02 |
-| ARCRAG-04 | Agent Answers Questions Using Hardcoded URL | Story | Medium | Small | 1 | ARCRAG-03 |
-| ARCRAG-05 | Sitemap Parser Script | Task | High | Medium | 2 | ARCRAG-01 |
-| ARCRAG-06 | Index Builder Script — Page Metadata Scraper | Task | High | Large | 2 | ARCRAG-05 |
-| ARCRAG-07 | Qdrant Loader Script — Embed & Upsert | Task | High | Medium | 2 | ARCRAG-06 |
-| ARCRAG-08 | search_index Tool — Qdrant Semantic Search | Story | High | Medium | 2 | ARCRAG-07 |
-| ARCRAG-09 | Agent Search → Fetch → Answer Flow | Story | High | Small | 2 | ARCRAG-08, ARCRAG-03 |
-| ARCRAG-10 | FastAPI Server with AG-UI Endpoint | Task | High | Medium | 3 | ARCRAG-09 |
-| ARCRAG-11 | Next.js App with CopilotKit Chat UI | Story | High | Medium | 3 | ARCRAG-10 |
-| ARCRAG-12 | Inline Image Rendering in Chat | Story | High | Small | 3 | ARCRAG-11 |
-| ARCRAG-13 | Source Citations & Links | Story | Medium | Small | 3 | ARCRAG-11 |
-| ARCRAG-14 | Suggestion Pills for Common Queries | Story | Low | Small | 3 | ARCRAG-11 |
-| ARCRAG-15 | Full ArcGIS Pro Index Ingestion | Task | High | Large | 4 | ARCRAG-07, ARCRAG-09 |
-| ARCRAG-16 | Full ArcMap Index Ingestion | Task | High | Medium | 4 | ARCRAG-07, ARCRAG-09 |
-| ARCRAG-17 | Production Docker Compose | Task | High | Medium | 4 | ARCRAG-10, ARCRAG-11 |
-| ARCRAG-18 | Reverse Proxy with HTTPS | Task | High | Small | 4 | ARCRAG-17 |
-| ARCRAG-19 | End-to-End Validation & Quality Check | Task | Medium | Medium | 4 | ARCRAG-15, ARCRAG-16, ARCRAG-18 |
+| ID | Title | Type | Priority | Complexity | Phase | Blocked By | Status |
+|----|-------|------|----------|------------|-------|------------|--------|
+| ARCRAG-01 | Project Scaffolding & Docker Infrastructure | Task | High | Small | 1 | — | ✅ Completed |
+| ARCRAG-02 | PydanticAI Agent with OpenRouter Connection | Story | High | Medium | 1 | ARCRAG-01 | ✅ Completed |
+| ARCRAG-03 | fetch_page Tool — Live Documentation Scraper | Story | High | Medium | 1 | ARCRAG-02 | ✅ Completed |
+| ARCRAG-04 | Agent Answers Questions Using Hardcoded URL | Story | Medium | Small | 1 | ARCRAG-03 | ✅ Completed |
+| ARCRAG-05 | Sitemap Parser Script | Task | High | Medium | 2 | ARCRAG-01 | ✅ Completed |
+| ARCRAG-06 | Index Builder Script — Page Metadata Scraper | Task | High | Large | 2 | ARCRAG-05 | ✅ Completed |
+| ARCRAG-07 | Qdrant Loader Script — Embed & Upsert | Task | High | Medium | 2 | ARCRAG-06 | ✅ Completed |
+| ARCRAG-08 | search_index Tool — Qdrant Semantic Search | Story | High | Medium | 2 | ARCRAG-07 | ✅ Completed |
+| ARCRAG-09 | Agent Search → Fetch → Answer Flow | Story | High | Small | 2 | ARCRAG-08, ARCRAG-03 | ✅ Completed |
+| ARCRAG-10 | FastAPI Server with AG-UI Endpoint | Task | High | Medium | 3 | ARCRAG-09 | ✅ Completed |
+| ARCRAG-11 | Next.js App with CopilotKit Chat UI | Story | High | Medium | 3 | ARCRAG-10 | ✅ Completed |
+| ARCRAG-12 | Inline Image Rendering in Chat | Story | High | Small | 3 | ARCRAG-11 | ✅ Completed |
+| ARCRAG-13 | Source Citations & Links | Story | Medium | Small | 3 | ARCRAG-11 | ✅ Completed |
+| ARCRAG-14 | Suggestion Pills for Common Queries | Story | Low | Small | 3 | ARCRAG-11 | ✅ Completed |
+| ARCRAG-15 | Full ArcGIS Pro Index Ingestion | Task | High | Large | 4 | ARCRAG-07, ARCRAG-09 | Pending |
+| ARCRAG-16 | Full ArcMap Index Ingestion | Task | High | Medium | 4 | ARCRAG-07, ARCRAG-09 | Pending |
+| ARCRAG-17 | Production Docker Compose | Task | High | Medium | 4 | ARCRAG-10, ARCRAG-11 | Pending |
+| ARCRAG-18 | Reverse Proxy with HTTPS | Task | High | Small | 4 | ARCRAG-17 | Pending |
+| ARCRAG-19 | End-to-End Validation & Quality Check | Task | Medium | Medium | 4 | ARCRAG-15, ARCRAG-16, ARCRAG-18 | Pending |
 
 ### Dependency Graph
 
