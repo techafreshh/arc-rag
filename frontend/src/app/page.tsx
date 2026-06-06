@@ -1,5 +1,8 @@
+"use client";
+
 import { CopilotSidebar } from "@copilotkit/react-ui";
 import "@copilotkit/react-ui/styles.css";
+import { markdownComponents } from "@/components/markdownComponents";
 
 export default function HomePage() {
   return (
@@ -9,6 +12,7 @@ export default function HomePage() {
         title: "ArcGIS Documentation Guide",
         initial: "Hi! Ask me anything about ArcGIS Pro or ArcMap.",
       }}
+      markdownTagRenderers={markdownComponents}
     >
       <main className="mx-auto max-w-3xl px-6 py-16">
         <h1 className="text-3xl font-semibold tracking-tight">
