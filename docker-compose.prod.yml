@@ -1,0 +1,68 @@
+services:
+  arcrag-init:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: ["/app/scripts/init.sh"]
+    restart: "no"
+    env_file: backend/.env
+    environment:
+      - QDRANT_COLLECTION=arcgis_docs
+    volumes:
+      - arcrag_data:/app/data
+
+  arcrag-init-arcmap:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: ["/app/scripts/init.sh"]
+    restart: "no"
+    env_file: backend/.env
+    environment:
+      - QDRANT_COLLECTION=arcgis_docs
+      - SOURCE=arcmap
+    volumes:
+      - arcrag_data:/app/data
+    depends_on:
+      arcrag-init:
+        condition: service_completed_successfully
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: ["python", "-m", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    restart: unless-stopped
+    mem_limit: 1g
+    env_file: backend/.env
+    environment:
+      - QDRANT_COLLECTION=arcgis_docs
+    volumes:
+      - arcrag_data:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      arcrag-init:
+        condition: service_completed_successfully
+      arcrag-init-arcmap:
+        condition: service_completed_successfully
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_BACKEND_URL: http://backend:8000
+    restart: unless-stopped
+    mem_limit: 512m
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  arcrag_data:
