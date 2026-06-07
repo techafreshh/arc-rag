@@ -29,6 +29,25 @@ services:
       qdrant:
         condition: service_healthy
 
+  arcrag-init-arcmap:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: ["/app/scripts/init.sh"]
+    restart: "no"
+    env_file: backend/.env
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_COLLECTION=arcgis_docs
+      - SOURCE=arcmap
+    volumes:
+      - arcrag_data:/app/data
+    depends_on:
+      qdrant:
+        condition: service_healthy
+      arcrag-init:
+        condition: service_completed_successfully
+
   backend:
     build:
       context: .
@@ -46,6 +65,8 @@ services:
       qdrant:
         condition: service_healthy
       arcrag-init:
+        condition: service_completed_successfully
+      arcrag-init-arcmap:
         condition: service_completed_successfully
 
 volumes:

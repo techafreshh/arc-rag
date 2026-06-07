@@ -24,12 +24,16 @@ async def test_import():
     m = _load_module()
     assert hasattr(m, "SOURCES"), "SOURCES missing"
     assert list(m.SOURCES.keys()) == ["arcpro", "arcmap"], f"Unexpected sources: {list(m.SOURCES.keys())}"
+    assert all("id_offset" in s for s in m.SOURCES.values()), "id_offset missing in SOURCES"
+    assert isinstance(m.SOURCES["arcmap"]["id_offset"], int), "arcmap id_offset must be int"
+    assert isinstance(m.SOURCES["arcpro"]["id_offset"], int), "arcpro id_offset must be int"
+    assert m.SOURCES["arcmap"]["id_offset"] > m.SOURCES["arcpro"]["id_offset"], "arcmap id_offset should exceed arcpro"
     assert hasattr(m, "flatten_entries"), "flatten_entries missing"
     assert hasattr(m, "embed_batch"), "embed_batch missing"
     assert hasattr(m, "detect_vector_size"), "detect_vector_size missing"
     assert hasattr(m, "setup_collection"), "setup_collection missing"
     assert hasattr(m, "load_qdrant"), "load_qdrant missing"
-    print("PASS - module imports cleanly, SOURCES has arcpro/arcmap")
+    print("PASS - module imports cleanly, SOURCES has arcpro/arcmap with id_offset")
 
 
 async def test_flatten():

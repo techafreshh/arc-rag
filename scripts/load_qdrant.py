@@ -23,10 +23,12 @@ SOURCES = {
     "arcpro": {
         "index_json": str(PROJECT_DIR / "data/arcpro_index.json"),
         "source": "arcpro",
+        "id_offset": 0,
     },
     "arcmap": {
         "index_json": str(PROJECT_DIR / "data/arcmap_index.json"),
         "source": "arcmap",
+        "id_offset": 1_000_000,
     },
 }
 
@@ -109,6 +111,8 @@ async def load_qdrant(source: str, recreate: bool, dry_run: bool, batch_size: in
         print(f"Index file not found: {index_path}")
         sys.exit(1)
 
+    id_offset = SOURCES[source]["id_offset"]
+
     pages = json.loads(index_path.read_text())
     print(f"Loaded {len(pages)} pages from {index_path.name}")
 
@@ -150,7 +154,7 @@ async def load_qdrant(source: str, recreate: bool, dry_run: bool, batch_size: in
             vectors = await embed_batch(client, texts)
             points = [
                 PointStruct(
-                    id=start + i,
+                    id=start + i + id_offset,
                     vector=vectors[i],
                     payload=batch[i]["payload"],
                 )

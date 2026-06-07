@@ -161,6 +161,70 @@ async def test_obscure_tool_zonal_statistics():
     print("PASS - Zonal Statistics as Table page found in top 5")
 
 
+async def test_obscure_tool_georeference_arcmap():
+    print("\n--- Test 9: Obscure tool 'georeferencing in ArcMap' in top 5 ---")
+    api_key = os.getenv("EMBEDDING_API_KEY") or os.getenv("OPENROUTER_API_KEY", "")
+    qdrant_url = os.getenv("QDRANT_URL", "http://localhost:6333")
+    if not api_key:
+        print("SKIP - no API key set")
+        return
+    from qdrant_client import QdrantClient
+    try:
+        q = QdrantClient(url=qdrant_url)
+        q.get_collections()
+    except Exception:
+        print("SKIP - Qdrant not reachable")
+        return
+
+    r = await search_index("How do I georeference in ArcMap?", top_k=5)
+    if r.error:
+        print(f"  SKIP - search error: {r.error}")
+        return
+    if not r.results:
+        print("  SKIP - no results returned")
+        return
+
+    target_suffix = "georeferencing.htm"
+    found = any(
+        target_suffix in result.url.lower() or "georeference" in result.title.lower()
+        for result in r.results
+    )
+    top_titles = [(res.title, res.url.rsplit("/", 1)[-1], res.source) for res in r.results]
+    print(f"  Top 5 results: {top_titles}")
+    assert found, f"Expected georeferencing page in top 5, got: {top_titles}"
+    print("PASS - georeferencing page found in top 5")
+
+
+async def test_source_filter_no_leakage():
+    print("\n--- Test 10: Source filter (no ArcGIS Pro leakage for ArcMap query) ---")
+    api_key = os.getenv("EMBEDDING_API_KEY") or os.getenv("OPENROUTER_API_KEY", "")
+    qdrant_url = os.getenv("QDRANT_URL", "http://localhost:6333")
+    if not api_key:
+        print("SKIP - no API key set")
+        return
+    from qdrant_client import QdrantClient
+    try:
+        q = QdrantClient(url=qdrant_url)
+        q.get_collections()
+    except Exception:
+        print("SKIP - Qdrant not reachable")
+        return
+
+    r = await search_index("buffer ArcMap", top_k=10)
+    if r.error:
+        print(f"  SKIP - search error: {r.error}")
+        return
+    if not r.results:
+        print("  SKIP - no results returned")
+        return
+
+    sources = [result.source for result in r.results]
+    print(f"  Result sources: {sources}")
+    non_arcmap = [s for s in sources if s != "arcmap"]
+    assert not non_arcmap, f"Expected all results to have source=arcmap, found leakage: {non_arcmap}"
+    print("PASS - all 10 results are from source=arcmap (no leakage)")
+
+
 async def test():
     await test_import()
     await test_models()
@@ -170,6 +234,8 @@ async def test():
     await test_qdrant_unreachable()
     await test_live_search()
     await test_obscure_tool_zonal_statistics()
+    await test_obscure_tool_georeference_arcmap()
+    await test_source_filter_no_leakage()
     print("\n=== ALL TESTS PASSED ===")
 
 

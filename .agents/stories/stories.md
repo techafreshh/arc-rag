@@ -452,6 +452,7 @@ As a developer, I want to run the full ingestion pipeline against all ArcGIS Pro
 **Phase**: 4 — Full Index & Deployment
 **Labels**: `scripts`, `ingestion`, `vectordb`
 **Blocked By**: ARCRAG-07, ARCRAG-09
+**Status**: ✅ Code complete 2026-06-07 (VPS runtime + vector count pending)
 
 #### Description
 As a developer, I want to run the full ingestion pipeline against all ArcMap documentation pages, so that students can ask about ArcMap workflows.
@@ -577,7 +578,7 @@ As a developer, I want to validate the deployed system against a test suite of r
 | ARCRAG-13 | Source Citations & Links | Story | Medium | Small | 3 | ARCRAG-11 | ✅ Completed |
 | ARCRAG-14 | Suggestion Pills for Common Queries | Story | Low | Small | 3 | ARCRAG-11 | ✅ Completed |
 | ARCRAG-15 | Full ArcGIS Pro Index Ingestion | Task | High | Large | 4 | ARCRAG-07, ARCRAG-09 | ⏳ In Progress (VPS run pending) |
-| ARCRAG-16 | Full ArcMap Index Ingestion | Task | High | Medium | 4 | ARCRAG-07, ARCRAG-09 | Pending |
+| ARCRAG-16 | Full ArcMap Index Ingestion | Task | High | Medium | 4 | ARCRAG-07, ARCRAG-09 | ✅ Completed (code complete; VPS runtime + vector count pending) |
 | ARCRAG-17 | Production Docker Compose | Task | High | Medium | 4 | ARCRAG-10, ARCRAG-11 | Pending |
 | ARCRAG-18 | Reverse Proxy with HTTPS | Task | High | Small | 4 | ARCRAG-17 | Pending |
 | ARCRAG-19 | End-to-End Validation & Quality Check | Task | Medium | Medium | 4 | ARCRAG-15, ARCRAG-16, ARCRAG-18 | Pending |
