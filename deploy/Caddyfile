@@ -1,0 +1,39 @@
+# ArcGIS Documentation RAG — reverse proxy + HTTPS + rate limit
+#
+# Copy this file into your existing Caddy config (e.g.,
+# /etc/caddy/Caddyfile.d/arcrag-docs, or include it from your main
+# Caddyfile with `import /etc/caddy/Caddyfile.d/arcrag-docs`).
+#
+# This Caddyfile assumes your Caddy container is on the same Docker
+# network as the arcpro-docs compose stack (the named network
+# `arcrag-net` defined in docker-compose.prod.yml). Attach it with:
+#
+#   docker network connect arcrag-net <caddy-container-name>
+#
+# Set the env vars below in your Caddy environment (systemd
+# Environment=, docker run -e, or Caddy's --env flag).
+#
+# Required env vars (with defaults):
+#   CADDY_DOMAIN                    e.g., arcgis-docs.example.com
+#   CADDY_EMAIL                     e.g., admin@example.com (for Let's Encrypt)
+#   CADDY_RATE_LIMIT_PER_MINUTE     default 20 (matches PRD §9)
+
+{
+    email {$CADDY_EMAIL:admin@example.com}
+}
+
+{$CADDY_DOMAIN:arcgis-docs.example.com} {
+    encode gzip zstd
+    reverse_proxy frontend:3000
+
+    # Rate-limit only the chat endpoint. Static assets and page
+    # navigations are not limited (per PRD §9).
+    @api path /api/*
+    rate_limit @api {$CADDY_RATE_LIMIT_PER_MINUTE:20}r/m
+}
+
+# HTTP -> HTTPS redirect (explicit for clarity; Caddy does this
+# implicitly when an HTTPS block exists for the same domain).
+http://{$CADDY_DOMAIN:arcgis-docs.example.com} {
+    redir https://{host}{uri} permanent
+}
