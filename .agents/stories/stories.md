@@ -510,6 +510,7 @@ As a developer, I want a production Docker Compose configuration that runs all s
 **Phase**: 4 — Full Index & Deployment
 **Labels**: `infrastructure`, `devops`, `deployment`
 **Blocked By**: ARCRAG-17
+**Status**: ✅ Code complete 2026-06-07 (VPS validation — `caddy validate`, network attach, HTTPS smoke, rate-limit smoke — deferred to operator)
 
 #### Description
 As a developer, I want HTTPS termination and routing via a reverse proxy, so that the application is secure and accessible via a domain name.
@@ -580,7 +581,7 @@ As a developer, I want to validate the deployed system against a test suite of r
 | ARCRAG-15 | Full ArcGIS Pro Index Ingestion | Task | High | Large | 4 | ARCRAG-07, ARCRAG-09 | ⏳ In Progress (VPS run pending) |
 | ARCRAG-16 | Full ArcMap Index Ingestion | Task | High | Medium | 4 | ARCRAG-07, ARCRAG-09 | ✅ Completed (code complete; VPS runtime + vector count pending) |
 | ARCRAG-17 | Production Docker Compose | Task | High | Medium | 4 | ARCRAG-10, ARCRAG-11 | Pending |
-| ARCRAG-18 | Reverse Proxy with HTTPS | Task | High | Small | 4 | ARCRAG-17 | Pending |
+| ARCRAG-18 | Reverse Proxy with HTTPS | Task | High | Small | 4 | ARCRAG-17 | ✅ Code complete 2026-06-07 (VPS validation pending) |
 | ARCRAG-19 | End-to-End Validation & Quality Check | Task | Medium | Medium | 4 | ARCRAG-15, ARCRAG-16, ARCRAG-18 | Pending |
 
 ### Dependency Graph
