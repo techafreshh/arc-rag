@@ -1,0 +1,186 @@
+{
+  "queries": [
+    {
+      "id": "Q01",
+      "query": "How do I create a buffer in ArcGIS Pro?",
+      "category": "tool_workflow",
+      "source_hint": "arcpro",
+      "expected_keywords": ["buffer", "input features", "distance", "output"],
+      "expected_url_pattern": "buffer"
+    },
+    {
+      "id": "Q02",
+      "query": "How do I clip features in ArcGIS Pro?",
+      "category": "tool_workflow",
+      "source_hint": "arcpro",
+      "expected_keywords": ["clip", "input features", "clip features", "output feature class"],
+      "expected_url_pattern": "tool-reference/analysis/clip"
+    },
+    {
+      "id": "Q03",
+      "query": "What is the Intersect tool in ArcGIS Pro?",
+      "category": "tool_workflow",
+      "source_hint": "arcpro",
+      "expected_keywords": ["intersect", "input features", "overlap", "output"],
+      "expected_url_pattern": "intersect"
+    },
+    {
+      "id": "Q04",
+      "query": "How do I perform a spatial join in ArcGIS Pro?",
+      "category": "tool_workflow",
+      "source_hint": "arcpro",
+      "expected_keywords": ["spatial join", "target features", "join features", "output"],
+      "expected_url_pattern": "spatial-join"
+    },
+    {
+      "id": "Q05",
+      "query": "How do I export data from ArcGIS Pro?",
+      "category": "tool_workflow",
+      "source_hint": "arcpro",
+      "expected_keywords": ["export", "feature class", "shapefile", "geodatabase"],
+      "expected_url_pattern": "export"
+    },
+    {
+      "id": "Q06",
+      "query": "How do I create a buffer in ArcMap?",
+      "category": "tool_workflow",
+      "source_hint": "arcmap",
+      "expected_keywords": ["buffer", "input features", "distance", "output"],
+      "expected_url_pattern": "buffer"
+    },
+    {
+      "id": "Q07",
+      "query": "How do I georeference a raster in ArcMap?",
+      "category": "tool_workflow",
+      "source_hint": "arcmap",
+      "expected_keywords": ["georeference", "raster", "control points", "transformation"],
+      "expected_url_pattern": "georeferencing"
+    },
+    {
+      "id": "Q08",
+      "query": "How do I use the Editor toolbar in ArcMap?",
+      "category": "tool_workflow",
+      "source_hint": "arcmap",
+      "expected_keywords": ["editor", "start editing", "sketch", "attributes"],
+      "expected_url_pattern": "editor"
+    },
+    {
+      "id": "Q09",
+      "query": "How do I create a new project in ArcGIS Pro?",
+      "category": "pro_workflow",
+      "source_hint": "arcpro",
+      "expected_keywords": ["project", "template", "create", "name"],
+      "expected_url_pattern": "project"
+    },
+    {
+      "id": "Q10",
+      "query": "How do I add data to a map in ArcGIS Pro?",
+      "category": "pro_workflow",
+      "source_hint": "arcpro",
+      "expected_keywords": ["add data", "catalog", "map", "layer"],
+      "expected_url_pattern": "add-data"
+    },
+    {
+      "id": "Q11",
+      "query": "How do I symbolize features by category in ArcGIS Pro?",
+      "category": "pro_workflow",
+      "source_hint": "arcpro",
+      "expected_keywords": ["symbology", "symbolize", "category", "unique values"],
+      "expected_url_pattern": "symbolize"
+    },
+    {
+      "id": "Q12",
+      "query": "How do I share a map as a web map in ArcGIS Pro?",
+      "category": "pro_workflow",
+      "source_hint": "arcpro",
+      "expected_keywords": ["share", "web map", "web layer", "portal"],
+      "expected_url_pattern": "share"
+    },
+    {
+      "id": "Q13",
+      "query": "How do I open ArcMap and create a new map document?",
+      "category": "arcmap_workflow",
+      "source_hint": "arcmap",
+      "expected_keywords": ["arcmap", "map document", "mxd", "new"],
+      "expected_url_pattern": "map-documents"
+    },
+    {
+      "id": "Q14",
+      "query": "How do I add a shapefile to ArcMap?",
+      "category": "arcmap_workflow",
+      "source_hint": "arcmap",
+      "expected_keywords": ["add data", "shapefile", "arcatalog", "layer"],
+      "expected_url_pattern": "adding-data"
+    },
+    {
+      "id": "Q15",
+      "query": "What is a geodatabase in ArcGIS?",
+      "category": "conceptual",
+      "source_hint": "arcpro",
+      "expected_keywords": ["geodatabase", "feature class", "esri", "container"],
+      "expected_url_pattern": "geodatabase"
+    },
+    {
+      "id": "Q16",
+      "query": "What is a shapefile?",
+      "category": "conceptual",
+      "source_hint": "arcpro",
+      "expected_keywords": ["shapefile", "shp", "shx", "dbf", "esri"],
+      "expected_url_pattern": "shapefile"
+    },
+    {
+      "id": "Q17",
+      "query": "What is ModelBuilder in ArcGIS Pro?",
+      "category": "conceptual",
+      "source_hint": "arcpro",
+      "expected_keywords": ["modelbuilder", "model", "tool", "workflow"],
+      "expected_url_pattern": "modelbuilder"
+    },
+    {
+      "id": "Q18",
+      "query": "What is the difference between ArcGIS Pro and ArcMap?",
+      "category": "comparison",
+      "source_hint": "arcpro",
+      "expected_keywords": ["arcgis pro", "arcmap", "difference", "2d", "3d"],
+      "expected_url_pattern": "arcgis-pro"
+    },
+    {
+      "id": "Q19",
+      "query": "What is the difference between the Clip and Intersect tools?",
+      "category": "comparison",
+      "source_hint": "arcpro",
+      "expected_keywords": ["clip", "intersect", "overlap", "output"],
+      "expected_url_pattern": "clip"
+    },
+    {
+      "id": "Q20",
+      "query": "How do I use ArcPy for batch geoprocessing?",
+      "category": "arcpy",
+      "source_hint": "arcpro",
+      "expected_keywords": ["arcpy", "loop", "batch", "script", "geoprocessing"],
+      "expected_url_pattern": "arcpy"
+    }
+  ],
+  "edge_cases": [
+    {
+      "id": "E01",
+      "query": "asdfgh",
+      "category": "gibberish"
+    },
+    {
+      "id": "E02",
+      "query": "what's the weather today?",
+      "category": "non_gis"
+    },
+    {
+      "id": "E03",
+      "query": "buffer",
+      "category": "single_word"
+    },
+    {
+      "id": "E04",
+      "query": "How do I do spatial analysis?",
+      "category": "vague_broad"
+    }
+  ]
+}
