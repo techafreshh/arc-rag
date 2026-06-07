@@ -118,6 +118,45 @@ Reviewer: __________  Date: __________  VPS run timestamp: __________
 
 Acceptance gate: average relevance ≥ 4.0/5.
 
+## Jira Update
+
+**Jira Issue**: `ARCRAG-19`
+
+The Atlassian MCP tools (`mcp__atlassian__*`) are not available in this
+execution environment, and neither `gh` nor `jira` CLIs are installed on
+PATH. The Jira update phase (transition + comment) could not be performed
+automatically. The operator should manually:
+
+1. Transition ARCRAG-19 to **In Review** (or appropriate status)
+2. Add a comment with this implementation summary and a link to
+   `.agents/reports/arccrag-19-e2e-validation-report.md`
+3. Once the VPS run is complete, transition to **Done**
+
+Suggested comment body:
+
+> Implementation of ARCRAG-19 (End-to-End Validation & Quality Check) is
+> code-complete on branch `feature/arccrag-19-e2e-validation`.
+>
+> **What was implemented:**
+> - `tests/e2e_queries.json` — 20-query corpus (Pro tools, ArcMap tools,
+>   Pro workflows, ArcMap workflows, conceptual, comparison, ArcPy) + 4
+>   edge cases
+> - `backend/test_e2e_queries.py` — 12 test functions including relevance
+>   rate (≥80%), image inclusion (≥60%), source citation (100%), latency
+>   (mean <10s), edge-case handlers, and ARCRAG-18 rate-limit smoke
+>   regression
+>
+> **Files created:** 2 (test corpus + test runner)
+> **Tests written:** 12 test functions, 1 static-validation script
+> **Deviation:** Source citation regex broadened from `(pro|desktop).arcgis.com`
+> to also cover `doc.esri.com` (actual indexed URL domain)
+>
+> **Full report:** `.agents/reports/arccrag-19-e2e-validation-report.md`
+> **Decision log:** `.agents/decisions/arccrag-19-e2e-validation.md`
+>
+> **Next step:** Operator runs the VPS runbook (Steps 0-5 in report),
+> fills in the manual review worksheet, and transitions to Done.
+
 ## VPS-Side Runbook (deferred to VPS run)
 
 ```bash
