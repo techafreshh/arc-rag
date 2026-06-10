@@ -10,8 +10,6 @@ services:
       - QDRANT_COLLECTION=arcgis_docs
     volumes:
       - arcrag_data:/app/data
-    networks:
-      - arcrag-net
 
   arcrag-init-arcmap:
     build:
@@ -28,8 +26,6 @@ services:
     depends_on:
       arcrag-init:
         condition: service_completed_successfully
-    networks:
-      - arcrag-net
 
   backend:
     build:
@@ -54,8 +50,6 @@ services:
         condition: service_completed_successfully
       arcrag-init-arcmap:
         condition: service_completed_successfully
-    networks:
-      - arcrag-net
 
   frontend:
     build:
@@ -69,12 +63,6 @@ services:
     depends_on:
       backend:
         condition: service_healthy
-    networks:
-      - arcrag-net
 
 volumes:
   arcrag_data:
-
-networks:
-  arcrag-net:
-    name: arcrag-net
