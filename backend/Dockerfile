@@ -15,6 +15,7 @@ RUN pip install --no-cache-dir \
 COPY backend/src/ /app/src/
 COPY scripts/ /app/scripts/
 COPY data/ /app/data/
+RUN chmod +x /app/scripts/init.sh
 
 EXPOSE 8000
 
