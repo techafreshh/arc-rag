@@ -88,14 +88,15 @@ async def search_index(
         if source_filter:
             search_filter = Filter(must=[FieldCondition(key="source", match=MatchValue(value=source_filter))])
 
-        hits = qdrant.search(
+        response = qdrant.query_points(
             collection_name=QDRANT_COLLECTION,
-            query_vector=vector,
+            query=vector,
             limit=top_k * 2,
             score_threshold=min_score,
             query_filter=search_filter,
             with_payload=True,
         )
+        hits = response.points
     except Exception as e:
         return SearchResults(results=[], error=f"Qdrant search failed: {e}")
 
