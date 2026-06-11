@@ -9,8 +9,8 @@ echo "[init] (source=${SOURCE}) Starting ingestion"
 
 echo "[init] Waiting for Qdrant at ${QDRANT_URL}..."
 for i in $(seq 1 60); do
-    status=$(wget -q -O- "${QDRANT_URL}/health" 2>/dev/null || true)
-    if echo "$status" | grep -q '"status":"green"'; then
+    status=$(wget -q -O- "${QDRANT_URL}/readyz" 2>/dev/null || true)
+    if echo "$status" | grep -q 'all shards are ready'; then
         echo "[init] Qdrant is healthy"
         break
     fi
@@ -31,8 +31,11 @@ if [ "$source_count" -gt 0 ]; then
     exit 0
 fi
 
+echo "[init] Running parse_sitemaps.py (source=${SOURCE})..."
+python /app/scripts/parse_sitemaps.py --source "$SOURCE"
+
 echo "[init] Running build_index.py (source=${SOURCE})..."
-python /app/scripts/build_index.py --source "$SOURCE" --concurrency 5 --delay 0.2
+python /app/scripts/build_index.py --source "$SOURCE" --concurrency 5 --delay 1.0
 
 echo "[init] Running load_qdrant.py (source=${SOURCE})..."
 python /app/scripts/load_qdrant.py --source "$SOURCE" --batch-size 100

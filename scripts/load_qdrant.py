@@ -16,7 +16,8 @@ PROJECT_DIR = SCRIPT_DIR.parent
 
 load_dotenv()
 
-sys.path.insert(0, str(PROJECT_DIR / "backend"))
+backend_dir = PROJECT_DIR / "backend"
+sys.path.insert(0, str(backend_dir if backend_dir.exists() else PROJECT_DIR))
 from src.embed import EMBEDDING_MODEL, EMBEDDING_API_KEY, OPENROUTER_EMBEDDINGS_URL, embed_batch
 
 SOURCES = {

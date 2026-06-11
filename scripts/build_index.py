@@ -43,6 +43,26 @@ async def fetch_html(client: httpx.AsyncClient, url: str) -> str | None:
         if resp.status_code != 200:
             print(f" HTTP {resp.status_code}", flush=True)
             return None
+        # Handle meta refresh redirects
+        if 'http-equiv="refresh"' in resp.text.lower() or "http-equiv='refresh'" in resp.text.lower():
+            import re
+            match = re.search(r'url=([^"\'>\s]+)', resp.text, re.IGNORECASE)
+            if match:
+                redirect_url = match.group(1).strip()
+                if redirect_url.startswith('/'):
+                    from urllib.parse import urljoin
+                    redirect_url = urljoin(str(resp.url), redirect_url)
+                try:
+                    resp2 = await client.get(redirect_url)
+                    if resp2.status_code == 200:
+                        return resp2.text
+                except Exception:
+                    pass
+        # Check if content has main/article tags
+        has_main = '<main' in resp.text
+        has_article = '<article' in resp.text
+        if not has_main and not has_article:
+            print(f" NO_MAIN: {url[:60]} len={len(resp.text)}", flush=True)
         return resp.text
     return None
 
@@ -186,16 +206,23 @@ async def build_index(source: str, limit: int | None = None, concurrency: int = 
 
     async def process(url: str):
         async with semaphore:
-            html = await fetch_html(client, url)
             await asyncio.sleep(delay)
+            async with httpx.AsyncClient(follow_redirects=True, timeout=10.0) as client:
+                html = await fetch_html(client, url)
             if html is None:
                 failed_urls.add(url)
                 done_urls.add(url)
+                n = len(done_urls)
+                if n % 100 == 0:
+                    save_checkpoint(config["checkpoint"], done_urls, pages, failed_urls)
                 return
             page = parse_page(html, url, source)
             if page is None or not page["title"]:
                 failed_urls.add(url)
                 done_urls.add(url)
+                n = len(done_urls)
+                if n % 100 == 0:
+                    save_checkpoint(config["checkpoint"], done_urls, pages, failed_urls)
                 return
             pages.append(page)
             done_urls.add(url)
@@ -204,8 +231,12 @@ async def build_index(source: str, limit: int | None = None, concurrency: int = 
                 save_checkpoint(config["checkpoint"], done_urls, pages, failed_urls)
             print(f"[{source}] {n}/{total} {url} -> {page['title'][:60]}", flush=True)
 
-    async with httpx.AsyncClient(follow_redirects=True, timeout=10.0) as client:
-        await asyncio.gather(*(process(u) for u in remaining))
+    batch_size = concurrency * 10
+    for i in range(0, len(remaining), batch_size):
+        batch = remaining[i:i + batch_size]
+        print(f"[{source}] Processing batch {i//batch_size + 1} ({len(batch)} URLs)...", flush=True)
+        await asyncio.gather(*(process(u) for u in batch))
+        print(f"[{source}] Batch {i//batch_size + 1} done. Total: {len(done_urls)}/{total}", flush=True)
 
     save_checkpoint(config["checkpoint"], done_urls, pages, failed_urls)
     Path(config["output"]).write_text(json.dumps(pages, indent=2, ensure_ascii=False))

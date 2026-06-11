@@ -1,5 +1,5 @@
 services:
-  arcrag-init:
+  arcpro-init:
     build:
       context: .
       dockerfile: backend/Dockerfile
@@ -11,7 +11,7 @@ services:
     volumes:
       - arcrag_data:/app/data
 
-  arcrag-init-arcmap:
+  arcmap-init:
     build:
       context: .
       dockerfile: backend/Dockerfile
@@ -24,7 +24,7 @@ services:
     volumes:
       - arcrag_data:/app/data
     depends_on:
-      arcrag-init:
+      arcpro-init:
         condition: service_completed_successfully
 
   backend:
@@ -40,15 +40,15 @@ services:
     volumes:
       - arcrag_data:/app/data
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8000/health"]
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:8000/health"]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 30s
     depends_on:
-      arcrag-init:
+      arcpro-init:
         condition: service_completed_successfully
-      arcrag-init-arcmap:
+      arcmap-init:
         condition: service_completed_successfully
 
   frontend:
@@ -58,8 +58,8 @@ services:
         NEXT_PUBLIC_BACKEND_URL: http://backend:8000
     restart: unless-stopped
     mem_limit: 512m
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     depends_on:
       backend:
         condition: service_healthy
