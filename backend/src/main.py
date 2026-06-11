@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from langfuse import get_client
 from pydantic_ai.ui.ag_ui import AGUIAdapter
 from qdrant_client import QdrantClient
 from starlette.requests import Request
@@ -25,6 +26,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.on_event("shutdown")
+def shutdown_event():
+    langfuse = get_client()
+    langfuse.flush()
 
 
 @app.get("/health")
