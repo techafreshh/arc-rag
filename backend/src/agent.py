@@ -6,10 +6,17 @@ from pydantic_ai import Agent, RunContext
 from src.tools.fetch import PageContent, fetch_page as _fetch_page
 from src.tools.lookup import lookup_url as _lookup_url
 from src.tools.search import SearchResults, search_index as _search_index
+from langfuse import get_client
 
 load_dotenv()
 
+langfuse = get_client()
+if not langfuse.auth_check():
+    print("Warning: Langfuse authentication failed — traces will not be exported")
+
 model = os.getenv("OPENROUTER_MODEL", "anthropic/claude-3.5-sonnet")
+
+Agent.instrument_all()
 
 agent = Agent(
     f"openrouter:{model}",
@@ -28,6 +35,7 @@ agent = Agent(
         "Always end responses with a source citation: **Source:** [Page Title](url). "
         "If you are unsure about something, say so rather than guessing."
     ),
+    instrument=True,
 )
 
 

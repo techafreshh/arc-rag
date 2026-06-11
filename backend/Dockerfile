@@ -12,7 +12,8 @@ RUN pip install --no-cache-dir \
     beautifulsoup4 \
     qdrant-client \
     python-dotenv \
-    cachetools
+    cachetools \
+    langfuse
 
 COPY backend/src/ /app/src/
 COPY scripts/ /app/scripts/

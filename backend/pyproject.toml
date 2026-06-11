@@ -10,6 +10,7 @@ dependencies = [
     "beautifulsoup4",
     "qdrant-client",
     "python-dotenv",
+    "langfuse",
 ]
 
 [build-system]
