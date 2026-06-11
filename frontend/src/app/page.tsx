@@ -1,34 +1,39 @@
 "use client";
 
-import { CopilotSidebar } from "@copilotkit/react-ui";
+import { CopilotChat } from "@copilotkit/react-ui";
 import "@copilotkit/react-ui/styles.css";
 import { ChatSuggestions } from "@/components/ChatSuggestions";
 import { markdownComponents } from "@/components/markdownComponents";
 
 export default function HomePage() {
   return (
-    <CopilotSidebar
-      defaultOpen
-      labels={{
-        title: "ArcGIS Documentation Guide",
-        initial: "Hi! Ask me anything about ArcGIS Pro or ArcMap.",
-      }}
-      markdownTagRenderers={markdownComponents}
-    >
-      <ChatSuggestions />
-      <main className="mx-auto max-w-3xl px-6 py-16">
-        <h1 className="text-3xl font-semibold tracking-tight">
+    <div className="flex flex-col h-screen">
+      <header className="text-center pt-8 pb-4 px-6">
+        <img
+          src="https://www.esri.com/content/dam/esrisites/en-us/common/icons/esri-logo.svg"
+          alt="Esri"
+          className="h-10 mx-auto mb-4"
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+          }}
+        />
+        <h1 className="text-2xl font-semibold tracking-tight">
           ArcGIS Documentation Guide
         </h1>
-        <p className="mt-4 text-slate-600">
-          Ask questions about ArcGIS Pro or ArcMap and get answers pulled
-          directly from Esri's official documentation, with inline screenshots
-          and source citations.
+        <p className="text-sm text-slate-500 mt-1">
+          AI-powered Q&A for ArcGIS Pro and ArcMap documentation
         </p>
-        <p className="mt-2 text-sm text-slate-500">
-          Use the chat panel on the right to get started.
-        </p>
-      </main>
-    </CopilotSidebar>
+      </header>
+      <CopilotChat
+        className="flex-1 min-h-0"
+        labels={{
+          title: "ArcGIS Documentation Guide",
+          initial: "Hi! Ask me anything about ArcGIS Pro or ArcMap.",
+        }}
+        markdownTagRenderers={markdownComponents}
+      >
+        <ChatSuggestions />
+      </CopilotChat>
+    </div>
   );
 }
